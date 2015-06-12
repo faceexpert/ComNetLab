@@ -27,8 +27,8 @@ FACE_THRESHOLD = 70
 FACE_WEIGHT = 5
 FACE_MAX = 100
 
-NOSE_THRESHOLD = 60
-NOSE_WEIGHT = 4
+NOSE_THRESHOLD = 45
+NOSE_WEIGHT = 100.0/45.0
 NOSE_MAX = 100
 
 
@@ -175,9 +175,9 @@ def score_for_female(path):
     attr = call_detect(path)
     n = len(attr[u'face'])
     if n == 0:
-        return [-1, 0]
+        return [-1, False]
     if n >= 2:
-        return [-2, 0]
+        return [-2, False]
     #print attr
     land = call_landmark(attr[u'face'][0][u'face_id'])
     #print land
@@ -193,7 +193,7 @@ def score_for_female(path):
     gender = attr[u'face'][0]['attribute']['gender']
     isfemale = gender['value'] == u'Female'
     if (gender['confidence'] < 90):
-        isfemale = 1
+        isfemale = True
     print isfemale
     return [total_value, isfemale]
 
@@ -241,9 +241,9 @@ def score_for_male(path):
     attr = call_detect(path)
     n = len(attr[u'face'])
     if n == 0:
-        return [-1, 0]
+        return [-1, False]
     if n >= 2:
-        return [-2, 0]
+        return [-2, False]
     #print attr
     land = call_landmark(attr[u'face'][0][u'face_id'])
     #print land
@@ -256,6 +256,6 @@ def score_for_male(path):
     gender = attr[u'face'][0]['attribute']['gender']
     ismale = gender['value'] == u'Male'
     if (gender['confidence'] < 90):
-        ismale = 1
+        ismale = True
     print ismale
     return [total_value, ismale]

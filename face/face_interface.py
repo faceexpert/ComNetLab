@@ -18,8 +18,13 @@ def get_score_for_female(path):
 # b = 0 if gender is wrong
 
 #get_score_for_male('/home/chnlich/testdata/1.jpg')
-#get_score_for_male('/home/chnlich/testdata/2.jpg')
-#get_score_for_male('/home/chnlich/testdata/3.jpg')
 #get_score_for_female('/home/chnlich/testdata/1.jpg')
+#get_score_for_male('/home/chnlich/testdata/2.jpg')
 #get_score_for_female('/home/chnlich/testdata/2.jpg')
+#get_score_for_male('/home/chnlich/testdata/3.jpg')
 #get_score_for_female('/home/chnlich/testdata/3.jpg')
+#get_score_for_male('/home/chnlich/testdata/4.JPEG')
+#get_score_for_female('/home/chnlich/testdata/4.JPEG')
+#get_score_for_male('/home/chnlich/testdata/5.jpg')
+#get_score_for_female('/home/chnlich/testdata/5.jpg')
+
