@@ -5,15 +5,14 @@
         <title>Upload</title>   
     </head>
     <body>
-        <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+        <form id="upload_form" action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <p>{{ form.non_field_errors }}</p>
-            <p>{{ form.file.label_tag }} {{ form.file.help_text }}</p>
             <p>
                 {{ form.file.errors }}
-                {{ form.file }}
+				<input type="file" id="upload_file" name="file" accept="image/*" style="visibility: hidden; width: 0px; height: 0px" onchange="document.getElementById('upload_form').submit()" />
             </p>
-            <p><input type="submit" value="Upload" /></p>
+            <p><input type="submit" value="Upload" onclick="document.getElementById('upload_file').click(); return false" /></p>
         </form>
     </body>
 </html> 
