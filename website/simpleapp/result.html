@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>测试结果</title>
+		<style>
+		#photo {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			-webkit-transform: translateX(-50%) translateY(-50%);
+			-moz-transform: translateX(-50%) translateY(-50%);
+			-o-transform: translateX(-50%) translateY(-50%);
+		}
+		#canvas {
+			position: relative;
+			left: 50%;
+			transform: translateX(-50%);
+			-webkit-transform: translateX(-50%);
+			-moz-transform: translateX(-50%);
+			-o-transform: translateX(-50%);
+		}
+		.score 
+		{
+			text-align: center;
+			font-size: 40px;
+			line-height: 40px;
+			margin: 20px 0 20px 0;
+		}
+		.comment {
+			text-indent: 2em;
+			font-size: 1.5em;
+			line-height: 150%;
+		}
+		</style>
+	</head>
+	<body background="/static/bg.jpg">
+		<div id="photo">
+		<canvas id="canvas" width="{{img.width}}" height="{{img.height}}"></canvas>
+		<p class="score">你的旺{%if male%}妻{%else%}夫{%endif%}指数是 {{result}} 哦！</p>
+		<p class="comment">{{comment}}</p>
+		</div>
+		<script type="text/javascript">
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+var img = new Image();
+img.onload = function() {
+	ctx.drawImage(img, 0, 0);
+};
+img.src = "data:{{img.content_type}};base64,{{img.base64_data}}";
+		</script>
+	</body>
+</html>
