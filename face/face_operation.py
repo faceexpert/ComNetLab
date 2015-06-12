@@ -189,6 +189,7 @@ def score_for_female(path):
     print 'eye_value = ', eye_value, ' mouth_value = ', mouth_value, ' eyebrow_value = ', eyebrow_value, \
         ' chin_value = ', chin_value, ' face_value = ', face_value
     total_value = ((eye_value + mouth_value + eyebrow_value + chin_value + face_value) / 5 + 100) / 2
+    total_value = np.sqrt(total_value) * 10
     print 'total_value = ', total_value
     gender = attr[u'face'][0]['attribute']['gender']
     isfemale = gender['value'] == u'Female'
@@ -252,6 +253,7 @@ def score_for_male(path):
     nose_value = check_male_nose(attr, land)
     print 'mouth_value = ', mouth_value, ' eyebrow_value = ', eyebrow_value, ' nose_value = ', nose_value
     total_value = ((mouth_value + eyebrow_value + nose_value) / 3 + 100) / 2
+    total_value = np.sqrt(total_value) * 10
     print 'total_value = ', total_value
     gender = attr[u'face'][0]['attribute']['gender']
     ismale = gender['value'] == u'Male'
