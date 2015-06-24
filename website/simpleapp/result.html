@@ -8,6 +8,8 @@
 			position: absolute;
 			top: 50%;
 			left: 50%;
+			max-width: 800px;
+			width: 60%;
 			transform: translateX(-50%) translateY(-50%);
 			-webkit-transform: translateX(-50%) translateY(-50%);
 			-moz-transform: translateX(-50%) translateY(-50%);
@@ -21,8 +23,7 @@
 			-moz-transform: translateX(-50%);
 			-o-transform: translateX(-50%);
 		}
-		.score 
-		{
+		.score {
 			text-align: center;
 			font-size: 40px;
 			line-height: 40px;
@@ -30,16 +31,19 @@
 		}
 		.comment {
 			text-indent: 2em;
-			font-size: 1.5em;
+			font-size: 1.8em;
 			line-height: 150%;
 		}
 		</style>
 	</head>
 	<body background="/static/bg.jpg">
+		<div style="position: absolute; top: 0; left: 0">
+			<img src="/static/facepp_inside.png" height="50" />
+		</div>
 		<div id="photo">
-		<canvas id="canvas" width="{{img.width}}" height="{{img.height}}"></canvas>
-		<p class="score">你的旺{%if male%}妻{%else%}夫{%endif%}指数是 {{result}} 哦！</p>
-		<p class="comment">{{comment}}</p>
+			<canvas id="canvas" width="{{img.width}}" height="{{img.height}}"></canvas>
+			{%if good%}<p class="score">你的旺{%if male%}妻{%else%}夫{%endif%}指数是 {{result}} 哦！</p>
+			{%endif%}<p class="comment">{{comment}}</p>
 		</div>
 		<script type="text/javascript">
 var canvas = document.getElementById("canvas");

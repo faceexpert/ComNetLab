@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.core.files.uploadedfile import TemporaryUploadedFile
 from simpleapp.forms import UploadImageForm
 from PIL import Image
+from PIL import ExifTags
 import StringIO
 import tempfile
 import os
@@ -20,28 +21,43 @@ def upload_file(req):
 		if form.is_valid():
 			file = req.FILES['file']
 			if type(file) is not TemporaryUploadedFile:
-				tmp_file, tmp_path = tempfile.mkstemp()
-				tmp_file = os.fdopen(tmp_file, 'wb')
 				data = file.read()
-				tmp_file.write(data)
-				tmp_file.close()
 				im = Image.open(StringIO.StringIO(data))
 			else:
 				tmp_path = file.temporary_file_path()
 				im = Image.open(open(tmp_path, 'rb'))
+			try:
+				for ori in ExifTags.TAGS.keys():
+					if ExifTags.TAGS[ori] == 'Orientation': break
+				exif = dict(im._getexif().items())
+				if exif[ori] == 3:
+					im = im.rotate(180, expand=True)
+				elif exif[ori] == 6:
+					im = im.rotate(270, expand=True)
+				elif exif[ori] == 8:
+					im = im.rotate(90, expand=True)
+			except: pass
 
 			w, h = im.size
-			data = StringIO.StringIO()
-			if w * h > 43200 or max(w, h) > 600:
-				r = max(math.sqrt(w * h / 43200.), w / 600., h / 600.)
+			if w * h > 115200 or w > 800 or h > 600:
+				r = max(math.sqrt(w * h / 115200.), w / 800., h / 600.)
 				w, h = map(lambda x: int(math.ceil(x)), (w / r, h / r))
 				im.thumbnail((w, h), Image.ANTIALIAS)
+			data = StringIO.StringIO()
 			im.save(data, format='jpeg')
 			data.seek(0)
+			data = data.read()
+			tmp_file, tmp_path = tempfile.mkstemp()
+			with os.fdopen(tmp_file, 'wb') as fp:
+				fp.write(data)
 
 			male = req.POST['gender'] == 'm'
 			result = int(round((face.get_score_for_male(tmp_path) if male else face.get_score_for_female(tmp_path))[0]))
-			if result < 60:
+			if result == -1:
+				comment = '没有找到人的头像，请确认你的照片里面有你的完整人脸，再重新传一张试试~'
+			elif result == -2:
+				comment = '你的照片里面是不是照了很多人进去啊，系统都不知道哪个是你了，找一个没人的地方再拍一张上传吧~'
+			elif result < 60:
 				comment = '同学，你如此天生丽质，一定是照片的角度不够好遮盖了你的旺夫/旺妻气质，重新传一张试试吧~'
 			elif male:
 				if result <= 70:
@@ -65,15 +81,15 @@ def upload_file(req):
 					'content_type': 'image/jpeg',
 					'width': w,
 					'height': h,
-					'base64_data': base64.standard_b64encode(data.read())
+					'base64_data': base64.standard_b64encode(data)
 					},
 				'male': male,
 				'comment': comment,
-				'result': result
+				'result': result,
+				'good': result >= 0
 				})
-			if type(file) is not TemporaryUploadedFile:
-				try: os.remove(tmp_path)
-				except: pass
+			try: os.remove(tmp_path)
+			except: pass
 			return resp
 	else:
 		form = UploadImageForm()
